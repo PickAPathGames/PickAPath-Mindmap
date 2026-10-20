@@ -1,0 +1,7 @@
+sync_publish.sh
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+*.pkg.tar.zst
+.DS_Store
