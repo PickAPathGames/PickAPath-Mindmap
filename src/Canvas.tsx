@@ -815,6 +815,10 @@ export function Canvas() {
         setEdges((eds) => eds.map((ed) => (ed.selected ? { ...ed, selected: false } : ed)));
         return;
       }
+      if (!import.meta.env.DEV && (e.key === "F5" || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r"))) {
+        e.preventDefault();
+        return;
+      }
       if (e.key === "Home") {
         const active = document.activeElement as HTMLElement | null;
         if (active?.isContentEditable || active?.tagName === "INPUT") return; // native cursor-to-start instead

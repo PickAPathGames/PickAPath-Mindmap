@@ -20,11 +20,17 @@ Built with [Tauri v2](https://tauri.app), React, [React Flow](https://reactflow.
 
 ## Install
 
-### Arch Linux (AUR)
+### Arch Linux
+
+An AUR package (`pap-mindmap-git`) is planned, but the AUR has paused new account registration, so it's delayed until registration reopens. Until then, build the package from this repo:
 
 ```bash
-yay -S pap-mindmap-git
+git clone https://github.com/PickAPathGames/PickAPath-Mindmap.git
+cd PickAPath-Mindmap/packaging/arch
+makepkg -si
 ```
+
+This builds from the latest `main`, not a tagged release. After large system updates (e.g. `webkit2gtk-4.1`), rebuild with the same command.
 
 ### Build from source
 
@@ -44,6 +50,11 @@ npm ci
 npm run tauri dev                      # run in development
 npm run tauri build -- -b deb          # release build (binary: src-tauri/target/release/PAP-MindMap)
 ```
+
+### Windows (experimental)
+
+Download `PAP-MindMap_x.y.z_x64-setup.exe` from [Releases](https://github.com/PickAPathGames/PickAPath-Mindmap/releases).
+Windows SmartScreen may warn that the app is unrecognized because it isn't code-signed yet: click **More info**, then **Run anyway**.
 
 ## Usage
 

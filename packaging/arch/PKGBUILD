@@ -1,0 +1,42 @@
+# Maintainer: Pick A Path <support@pickapathgames.com>
+
+_reponame=PickAPath-Mindmap
+pkgname=pap-mindmap-git
+pkgver=r1
+pkgrel=1
+pkgdesc="Keyboard-driven desktop mind-mapping app (Tauri + React)"
+arch=('x86_64')
+url="https://github.com/PickAPathGames/${_reponame}"
+license=('MIT')
+depends=('cairo' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup3' 'webkit2gtk-4.1')
+makedepends=('git' 'openssl' 'appmenu-gtk-module' 'libappindicator-gtk3' 'librsvg' 'cargo' 'nodejs' 'npm')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+source=("git+${url}.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${_reponame}"
+  ( set -o pipefail
+    git describe --long --abbrev=7 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+  )
+}
+
+prepare() {
+  cd "${_reponame}"
+  npm ci
+  cargo fetch --locked --manifest-path src-tauri/Cargo.toml
+}
+
+build() {
+  cd "${_reponame}"
+  npm run tauri build -- -b deb
+}
+
+package() {
+  cd "${_reponame}"
+  # A .deb's data/ dir mirrors the final install layout (usr/bin, usr/share/...)
+  cp -a src-tauri/target/release/bundle/deb/*/data/* "${pkgdir}/"
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
